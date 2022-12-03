@@ -25,7 +25,7 @@ def test_api():
 @app.route("/transactions/byAccount" , methods=["POST"])
 def getTransactionsByAccount():
     uuid = str(uuid4())
-    APITransactionLogUtil.insertLog("GET Transactions", request.get_json(), None, uuid)
+    APITransactionLogUtil.insertLog("GET Transactions", request.get_data(), None, uuid)
     response = TransactionController.getTransactionsByAccount(request)
     # APITransactionLogUtil.insertLog("User Auth", request.get_data(), response.get_data(), uuid)
     return response
@@ -33,7 +33,7 @@ def getTransactionsByAccount():
 @app.route("/user/login", methods=["POST"])
 def authUser():
     uuid = str(uuid4())
-    APITransactionLogUtil.insertLog("User Auth", request.get_json(), None, uuid)
+    APITransactionLogUtil.insertLog("User Auth", request.get_data(), None, uuid)
     response = UserController.authUser(request)
     # APITransactionLogUtil.insertLog("User Auth", request.get_data(), response.get_data(), uuid)
     return response
@@ -41,7 +41,7 @@ def authUser():
 @app.route("/user/info", methods=["POST"])
 def retrieveUserDetails():
     uuid = str(uuid4())
-    APITransactionLogUtil.insertLog("User Info", request.get_json(), None, uuid)
+    APITransactionLogUtil.insertLog("User Info", request.get_data(), None, uuid)
     response = UserController.retrieveUserDetails(request)
     # APITransactionLogUtil.insertLog("User Info", request.get_data(), response.get_data(), uuid)
     return response
@@ -49,7 +49,7 @@ def retrieveUserDetails():
 @app.route("/user/updateInfo", methods=["POST"])
 def updateUserDetails():
     uuid = str(uuid4())
-    APITransactionLogUtil.insertLog("UPDATE User Info", request.get_json(), None, uuid)
+    APITransactionLogUtil.insertLog("UPDATE User Info", request.get_data(), None, uuid)
     response = UserController.updateUserDetails(request)
     # APITransactionLogUtil.insertLog("UPDATE User Info", request.get_data(), response.get_data(), uuid)
     return response
@@ -64,7 +64,7 @@ def logoutUser():
 @app.route("/user/bankaccounts", methods=["POST"])
 def getBankAccInfo():
     uuid = str(uuid4())
-    APITransactionLogUtil.insertLog("Get Bank Account Info", request.get_json(), None, uuid)
+    APITransactionLogUtil.insertLog("Get Bank Account Info", request.get_data(), None, uuid)
     response = UserController.getBankAccInfo(request)
     # APITransactionLogUtil.insertLog("Get Bank Account Info", request.get_data(), response.get_data(), uuid)
     return response
@@ -72,17 +72,21 @@ def getBankAccInfo():
 #insert transaction by 
 @app.route("/transactions/insert", methods=['POST'])
 def insertTransaction():
-     return TransactionController.insert_transaction(request)
+    uuid = str(uuid4())
+    APITransactionLogUtil.insertLog("INSERT transaction", request.get_data(), None, uuid)
+    return TransactionController.insert_transaction(request)
 
 #delete transaction by 
 @app.route("/transactions/delete", methods=['GET', 'DELETE'])
 def deleteTransaction():
-     return TransactionController.delete_Transaction(request)
+    uuid = str(uuid4())
+    APITransactionLogUtil.insertLog("Delete Transaction", request.get_data(), None, uuid)
+    return TransactionController.delete_Transaction(request)
 
 @app.route("/user/accountid", methods=["POST"])
 def getAccountId():
     uuid = str(uuid4())
-    APITransactionLogUtil.insertLog("Get account id info", request.get_json(), None, uuid)
+    APITransactionLogUtil.insertLog("Get account id info", request.get_data(), None, uuid)
     response = UserController.getAccountId(request)
     # APITransactionLogUtil.insertLog("Get Bank Account Info", request.get_data(), response.get_data(), uuid)
     return response
