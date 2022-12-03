@@ -19,10 +19,15 @@ def test_api():
         }
     )
 
-#get transaction by 
-@app.route("/transactions")
+#get all transactions
+@app.route("/transactions" , methods=["GET"])
 def getTransaction():
      return TransactionController.getTransaction(request)
+
+#get transactions by bank account id
+@app.route("/transactions/byAccount" , methods=["POST"])
+def getTransactionsByAccount():
+     return TransactionController.getTransactionsByAccount(request)
     
 @app.route("/user/login", methods=["POST"])
 def authUser():
@@ -39,6 +44,9 @@ def updateUserDetails():
 @app.route("/user/logout", methods=["POST"])
 def logoutUser():
     return UserController.logoutUser(request)
+@app.route("/user/bankaccounts", methods=["POST"])
+def getBankAccInfo():
+    return UserController.getBankAccInfo(request)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5003, debug=True)
