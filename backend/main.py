@@ -22,7 +22,7 @@ def test_api():
 def authUser():
     return UserController.authUser(request)
 
-@app.route("/user/details", methods=["POST"])
+@app.route("/user/info", methods=["POST"])
 def retrieveUserDetails():
     return UserController.retrieveUserDetails(request)
 
