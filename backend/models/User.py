@@ -14,6 +14,7 @@ class User(db.Model):
     Email = Column(String(255))
     Address = Column(String(255))
     OptIntoPhyStatements = Column(BIT(1)) 
+    LoginCount = Column(Integer)
 
     def json(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
