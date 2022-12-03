@@ -79,7 +79,7 @@ class UserController():
                                 "status": "fail",
                                 "message": "User details not found"
                             }
-                        }),404
+                        })
 
                     else:
                        return jsonify({
