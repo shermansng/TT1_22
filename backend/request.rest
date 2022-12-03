@@ -1,0 +1,15 @@
+###
+
+POST http://127.0.0.1:5003/transactions/insert
+Content-Type: application/json
+
+{ 
+    "userID": 33,
+    "accountID": 123878923,
+    "receivingaccountID": 1238728379123,
+    "date": "2022-11-17T06:21:00.000Z",
+    "transactionamount": 23072,
+    "comment": "comment"
+    }
+
+###
