@@ -29,6 +29,13 @@ class UserController():
 
                     if user_data.Password == data["password"]:
                         auth_token = AuthUtil.encode_auth_token(user_data.Email)
+                        if user_data.LoginCount > 4:
+                            user_data.LoginCount = 0
+                            db.session.commit()
+                        else:
+                            user_data.LoginCount += 1
+                            db.session.commit()
+
                         return jsonify({
                             "code": 200,
                             "data": {
@@ -36,7 +43,8 @@ class UserController():
                                 "id": user_data.UserID,
                                 "firstName": user_data.Firstname,
                                 "lastName": user_data.Lastname,
-                                "token": auth_token.decode("utf-8")
+                                "token": auth_token.decode("utf-8"),
+                                "loginCount": user_data.LoginCount
                             }
                         })
                     else:
@@ -244,11 +252,16 @@ class UserController():
             ), 200
             
     def getBankAccInfo(request):
+        # Receive the userid from the request
         data = request.get_json()
-        user_bank_acc_data = BankAccount.query.filter_by(UserID=data["userid"]).all()
-        
+
         try:
-            if user_bank_acc_data == None:
+            # Retrieve the user data according to userid from BankAccount Table
+            # Include query within try block to catch any errors
+            user_bank_acc_data = BankAccount.query.filter_by(UserID=data["userid"]).all()
+
+            # if userid returns empty list, it means the user does not exist, return 404
+            if user_bank_acc_data == []:
                 return jsonify({
                     "code": 404,
                     "data": {
@@ -256,6 +269,8 @@ class UserController():
                         "message": "User does not exist"
                     }
                 })
+
+            # if userid returns a pupolated list, it means the user exists, return 200 and data retrieved
             else:
                 bank_acc_data = []
                 
@@ -269,11 +284,13 @@ class UserController():
                     "data": bank_acc_data
                     
                 })
+        
+        # catch any request error and return 500
         except Exception as error:
             print(error)
             return jsonify(
                 {
-                    "code": 400,
-                    "data": "Data format error"
+                    "code": 500,
+                    "data": "Please check your POST request values"
                 }
-            ),400
+            ),500
