@@ -6,35 +6,33 @@ import InputLabel from '@mui/material/InputLabel';
 import Button from '@mui/material/Button';
 import getUserInfo from "../../api/userInfoGet"
 import "./Account.css"
+import userInfoUpdate from "api/userInfoUpdate";
 
 const Account = () => 
 {    
-    const initialUserData = {
-      address: "",
-      email: "",
-      firstName: "",
-      lastName: "",
-      optIntoPhyStatements: null
-    };    
-
-    const [userData, getUserData] = React.useState(initialUserData)
-    const [username, setUsername] = React.useState("Username");
-    const [address, setAddress] = React.useState("Address")
-
+    const [userData, setUserData] = React.useState([])
+    const [email, setEmail] = React.useState("")
+    const [address, setAddress] = React.useState("")
+    const id = parseInt(sessionStorage.getItem("id"));
+    
     React.useEffect(() => {
       // declare the data fetching function
       const getUsers = async () => {
-        const data = await getUserInfo(1);
-        getUserData(data)
-        console.log(data)
+        let response = await getUserInfo(id);
+        console.log(response);
+        setUserData(response);
       }
-
+      
       // call the function
       getUsers()
         // make sure to catch any error
         .catch(console.error);
     }, [])
 
+    const HandleSubmit = (e) => {
+      e.preventDefault();
+      userInfoUpdate(id,email,address);
+    }
     return (
       <div>
         <NavBar/>
@@ -45,19 +43,19 @@ const Account = () =>
 
           <div className="account_username">
             <FormControl variant="standard">
-              <InputLabel htmlFor="component-simple">Username:</InputLabel>
-              <Input id="component-simple" value={userData.email} onChange={(e) => {setUsername(e.target.value)}}/>
+              <InputLabel htmlFor="component-simple">Email:</InputLabel>
+              <Input id="component-simple" value={userData["email"]} onChange={(e) => {setEmail(e.target.value)}}/>
             </FormControl>
           </div>
           
           <div className="account_address">
             <FormControl variant="standard">
               <InputLabel htmlFor="component-simple">Address:</InputLabel>
-              <Input id="component-simple" value={userData.address} onChange={(e) => {setAddress(e.target.value)}}/>
+              <Input id="component-simple" value={userData["address"]} onChange={(e) => {setAddress(e.target.value)}}/>
             </FormControl>
           </div>
 
-          <Button variant="contained" size="small" color="secondary" className="account_button_save">Save</Button>
+          <Button variant="contained" size="small" color="secondary" className="account_button_save" onClick={HandleSubmit}>Save</Button>
         </div>
       </div>
     );

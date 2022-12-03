@@ -3,11 +3,11 @@ import {URL, getHeader} from './apiConstant'
 
 const ep = `${URL}/user/updateInfo`;
 
-const updateUserInfo = async (id, email, password) => {
+const updateUserInfo = async (id, email, address) => {
     const payload = {
         id,
         email,
-        password,
+        address,
     }
     try {
         let res = await axios.post(ep, payload, {
