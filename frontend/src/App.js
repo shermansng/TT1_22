@@ -5,7 +5,8 @@ import Dashboard from "./components/Dashboard";
 import Home from "./components/Home";
 import {NavBar} from "./components/NavBar";
 import NoMatch from "./components/NoMatch";
-
+import TransactionPage from "./components/TransactionPage";
+ 
 function App() {
   return (
     <div>
@@ -15,6 +16,7 @@ function App() {
           <Route path="/transaction" element={<Dashboard />} />
           <Route path="/account" element={<About />} />
           <Route path="/nomatch" element={<NoMatch />} />
+          <Route path="transaction" element = {<TransactionPage />} />
         </Routes>
     </div>
   );
