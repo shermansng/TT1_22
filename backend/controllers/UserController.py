@@ -15,7 +15,7 @@ class UserController():
             if len(data) > 0:
                 try:
                     user_data = User.query.filter_by(Username=data["username"]).first()
-                    print(user_data)    
+                  
                     if user_data == None:
                         return jsonify({
                             "code": 404,
@@ -61,4 +61,51 @@ class UserController():
                     "data": "Data format error"
                 }
             )
+
+    def retrieveUserDetails(request):
+        data = request.get_json()
+        try:
+            if len(data) > 0:
+                try:
+                    user_data = User.query.filter_by(UserID=data["id"]).first()
+                    print(user_data)    
+                    if user_data == None:
+                        return jsonify({
+                            "code": 404,
+                            "data": {
+                                "status": "fail",
+                                "message": "User details not found"
+                            }
+                        }),404
+
+                    else:
+                       return jsonify({
+                            "code": 200,
+                            "data": {
+                                "firstName": user_data.Firstname,
+                                "lastName": user_data.Lastname,
+                                "email": user_data.Email,
+                                "address": user_data.Address,
+                                "optIntoPhyStatements": user_data.OptIntoPhyStatements
+
+                            }
+                        })
+                    
+                except Exception as error:
+                    print(error)
+                    return jsonify(
+                        {
+                            "code": 500,
+                            "data": "Retreive User info error. Please contact the administrator"
+                        }
+                    ),500
+        except Exception as error:
+            print(error)
+            return jsonify(
+                {
+                    "code": 400,
+                    "data": "Data format error"
+                }
+            ),400
+
             
