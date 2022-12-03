@@ -79,26 +79,31 @@ class TransactionController():
     def delete_Transaction(request): 
         data = request.get_json()
         try:
+            numOfDeletedTransactions = 0
+
             if len(data) > 0:
                 for i in data["transactionID"]:
                     transaction = ScheduledTransaction.query.filter_by(TransactionID=i).first()
                     if transaction != None:
                         db.session.delete(transaction)
                         db.session.commit()
+                        numOfDeletedTransactions += 1
+                        
+                if(numOfDeletedTransactions > 0):
+                    return jsonify({
+                        "code": 200,
+                        "data": {
+                            "message": "Deleted Successfully"
+                        }
+                    })
                     
-                        return jsonify({
-                            "code": 200,
-                            "data": {
-                                "message": "Deleted Successfully"
-                            }
-                        })
-                    else:
-                        return jsonify({
-                            "code": 200,
-                            "data": {
-                                "message": "No transactions deleted"
-                            }
-                        })
+                else:
+                    return jsonify({
+                        "code": 200,
+                        "data": {
+                            "message": "No transactions deleted"
+                        }
+                    })
 
         except Exception as error: 
             print(error)

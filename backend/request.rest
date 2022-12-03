@@ -5,12 +5,12 @@ Content-Type: application/json
 
 { 
     "userID": 33,
-    "accountID": 123878923,
+    "accountID": 621156213,
     "receivingaccountID": 1238728379123,
     "date": "2022-11-17T06:21:00.000Z",
     "transactionamount": 23072,
     "comment": "comment"
-    }
+}
 
 ###
 
@@ -18,7 +18,7 @@ POST http://127.0.0.1:5003/user/bankaccounts
 Content-Type: application/json
 
 {
-    "userid": 1
+    "userid": 10
 }
 
 ###
@@ -31,3 +31,10 @@ Content-Type: application/json
 }
 
 ###
+
+DELETE http://127.0.0.1:5003/transactions/delete
+Content-Type: application/json
+
+{
+    "transactionID": [10, 11] 
+}
