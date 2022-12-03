@@ -25,7 +25,7 @@ def getTransaction():
      return TransactionController.getTransaction(request)
 
 #get transactions by bank account id
-@app.route("/transactionsByAccount" , methods=["POST"])
+@app.route("/transactions/byAccount" , methods=["POST"])
 def getTransactionsByAccount():
      return TransactionController.getTransactionsByAccount(request)
     
