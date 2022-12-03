@@ -1,4 +1,5 @@
 from models.User import User
+from models.BankAccount import BankAccount
 from flask_bcrypt import Bcrypt
 from flask import jsonify
 from uuid import uuid4
@@ -165,3 +166,37 @@ class UserController():
                 }
             ),400
             
+    def getBankAccInfo(request):
+        data = request.get_json()
+        user_bank_acc_data = BankAccount.query.filter_by(UserID=data["userid"]).all()
+        
+        try:
+            if user_bank_acc_data == None:
+                return jsonify({
+                    "code": 404,
+                    "data": {
+                        "status": "failure",
+                        "message": "User does not exist"
+                    }
+                })
+            else:
+                bank_acc_data = []
+                
+                for bank_acc in user_bank_acc_data:
+                    bank_acc_data.append(bank_acc.json())
+
+                return jsonify({
+                    "code": 200,
+                    "status": "success",
+                    "message": "User bank account successfully retrieved",
+                    "data": bank_acc_data
+                    
+                })
+        except Exception as error:
+            print(error)
+            return jsonify(
+                {
+                    "code": 400,
+                    "data": "Data format error"
+                }
+            ),400

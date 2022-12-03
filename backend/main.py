@@ -22,7 +22,7 @@ def test_api():
 #get transaction by 
 @app.route("/transactions")
 def getTransaction():
-     return TransactionController.getTransaction(request)
+    return TransactionController.getTransaction(request)
     
 @app.route("/user/login", methods=["POST"])
 def authUser():
@@ -35,6 +35,10 @@ def retrieveUserDetails():
 @app.route("/user/updateInfo", methods=["POST"])
 def updateUserDetails():
     return UserController.updateUserDetails(request)
+
+@app.route("/user/bankaccounts", methods=["POST"])
+def getBankAccInfo():
+    return UserController.getBankAccInfo(request)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5003, debug=True)
