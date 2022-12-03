@@ -1,0 +1,15 @@
+.account_container{
+    text-align: center;
+}
+
+.account_username{
+    padding-bottom: 20px;
+}
+
+.account_address{
+    padding-bottom: 20px;
+}
+
+.account_button_save{
+    position: left;
+}
