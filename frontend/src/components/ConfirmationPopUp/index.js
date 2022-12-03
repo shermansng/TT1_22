@@ -7,10 +7,11 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
+import axios from "axios";
 
-function ConfirmationPopUp() {
+export const ConfirmationPopUp = React.forwardRef((value) => {
   const [open, setOpen] = React.useState(false);
-  
+  const id = value.value
   // for initial click of button
   const handleClickOpen = () => {
     setOpen(true);
@@ -23,6 +24,20 @@ function ConfirmationPopUp() {
 
   // for deleting the scheduled transaction and closing the popup
   const handleDelete = () => {
+    const deleteTransactions = async (id) => {
+      console.log(`ID: ${id}`);
+      const payload = {
+          "transactionID":id
+      };
+      console.log(payload)
+      try {
+          await axios.delete('http://ec2-13-215-211-254.ap-southeast-1.compute.amazonaws.com/transactions/delete', payload)
+      } catch (err) {
+          console.log(err);
+          return false;
+      }
+  } 
+    deleteTransactions(id)
     setOpen(false);
   };
 
@@ -54,6 +69,5 @@ function ConfirmationPopUp() {
       </Dialog>
     </div>
   );
-}
+})
 
-export {ConfirmationPopUp};
