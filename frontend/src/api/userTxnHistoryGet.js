@@ -13,10 +13,10 @@ const getTransactions = async (accountId) => {
         let res = await axios.post(endpoint, payload);
         let data = res.data;
         console.log(data)
-        if (data.status === 'success') {
-            return data.id;
-        } else if (data.status === 'fail') {
-            console.log(data.message);
+        if (data.code === 200) {
+            return data.data;
+        } else if (data.code === 400) {
+            console.log(data.data);
             return false;
         }
     } catch (err) {

@@ -7,6 +7,12 @@ const logout = async (username) => {
         username,
         token
     }
+    try {
+        // let res = await axios.
+    } catch (err) {
+        console.log(err);
+        return false;
+    }
 };
 
 export default logout;;

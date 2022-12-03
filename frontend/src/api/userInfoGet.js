@@ -13,6 +13,7 @@ const getUserInfo = async (id) => {
         id,
     }
     try {
+        console.log(`Getting userinfo iwth id: ${id}`);
         let axiosres = await axios.post(endpoint, payload);
         let res = axiosres.data;
         let data = res.data;
