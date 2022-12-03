@@ -1,0 +1,38 @@
+.navbar{
+    background-color: black;
+    overflow: hidden
+}
+
+.navbar_pages{
+    float: left;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+}
+
+.navbar_logo{
+    width: auto;
+    height: auto;
+    float: left;
+    max-height: 50px;
+    padding-right: 20px;
+}
+
+/* Change the color of links on hover */
+.navbar_pages:hover {
+    background-color: #ddd;
+    color: black;
+  }
+  
+/* Add a color to the active/current link */
+.navbar_pages.active {
+background-color: #CC0000;
+color: white;
+}
+
+.navbar_signout{
+    float: right;
+    margin: 14px 16px;
+}
