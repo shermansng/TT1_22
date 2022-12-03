@@ -1,0 +1,10 @@
+{
+  "exclude": ["dist", "node_modules"],
+  "compilerOptions": {
+    "baseUrl": "./src",
+    "module": "commonjs",
+    "checkJs": true,
+    "jsx": "react",
+    "target": "es6"
+  }
+}
