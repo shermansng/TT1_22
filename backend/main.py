@@ -31,5 +31,9 @@ def getTransaction():
 def retrieveUserDetails():
     return UserController.retrieveUserDetails(request)
 
+@app.route("/user/updateInfo", methods=["POST"])
+def updateUserDetails():
+    return UserController.updateUserDetails(request)
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5003, debug=True)
