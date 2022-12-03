@@ -148,59 +148,85 @@ class UserController():
 
     def updateUserDetails(request):
         data = request.get_json()
-        try:
-            if len(data) > 0:
-                try:
-                    user_data = User.query.filter_by(UserID=data["id"]).first()
-                    
-                    if user_data == None:
-                        return jsonify({
-                            "code": 404,
-                            "data": {
-                                "status": "fail",
-                                "message": "User details not found"
+
+        auth_token = AuthUtil.getAuthToken(request)
+        existingBlacklistToken = AuthUtil.checkBlacklistToken(auth_token)
+        if auth_token != None:
+            if existingBlacklistToken == None:
+                resp = AuthUtil.decode_auth_token(auth_token)
+                if not isinstance(resp, str):
+                    try:
+                        if len(data) > 0:
+                            try:
+                                user_data = User.query.filter_by(UserID=data["id"]).first()
+                                
+                                if user_data == None:
+                                    return jsonify({
+                                        "code": 404,
+                                        "data": {
+                                            "status": "fail",
+                                            "message": "User details not found"
+                                        }
+                                    }),404
+
+                                else:
+                                    if(len(data["email"]) == 0 and len(data["address"]) == 0):
+                                        return jsonify({
+                                            "code": 200,
+                                            "data": {
+                                                "status": "fail",
+                                                "message": "No data is updated"
+                                            }
+                                        }),200
+                                    else:
+
+                                        if(len(data["email"]) != 0):
+                                            user_data.Email = data["email"]
+                                        if(len(data["address"]) != 0):
+                                            user_data.Address = data["address"]
+                                        db.session.commit()
+                                        return jsonify({
+                                            "code": 200,
+                                            "data": {
+                                                "status": "success"
+                                            }
+                                        }),200
+                                
+                            except Exception as error:
+                                print(error)
+                                return jsonify(
+                                    {
+                                        "code": 500,
+                                        "data": "User Update Info Error. Please contact the administrator"
+                                    }
+                                ),500
+                    except Exception as error:
+                        print(error)
+                        return jsonify(
+                            {
+                                "code": 400,
+                                "data": "Data format error"
                             }
-                        }),404
-
-                    else:
-                        if(len(data["email"]) == 0 and len(data["address"]) == 0):
-                            return jsonify({
-                                "code": 200,
-                                "data": {
-                                    "status": "fail",
-                                    "message": "No data is updated"
-                                }
-                            }),200
-                        else:
-
-                            if(len(data["email"]) != 0):
-                                user_data.Email = data["email"]
-                            if(len(data["address"]) != 0):
-                                user_data.Address = data["address"]
-                            db.session.commit()
-                            return jsonify({
-                                "code": 200,
-                                "data": {
-                                    "status": "success"
-                                }
-                            }),200
-                    
-                except Exception as error:
-                    print(error)
-                    return jsonify(
-                        {
-                            "code": 500,
-                            "data": "User Update Info Error. Please contact the administrator"
-                        }
-                    ),500
-        except Exception as error:
-            print(error)
-            return jsonify(
-                {
-                    "code": 400,
-                    "data": "Data format error"
-                }
-            ),400
+                        ),400
+                else:
+                    responseObject = {
+                        'status': 'fail',
+                        'message': resp
+                    }
+                    return (jsonify(responseObject)), 401
+            else:
+                responseObject = {
+                        'status': 'fail',
+                        'message': 'Invalid Token'
+                    }
+                return (jsonify(responseObject)), 401
+        else:
+            responseObject = {
+                "code": 401,
+                'message': 'Provide a valid auth token'
+            }
+            return (jsonify(responseObject)), 401
+        
 
     def logoutUser(request):
         auth_token = AuthUtil.getAuthToken(request)
