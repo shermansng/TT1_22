@@ -5,6 +5,7 @@ from flask import jsonify
 from uuid import uuid4
 from config import app, db
 from util.AuthUtil import AuthUtil
+from models.BlacklistToken import BlacklistToken
 
 
 bcrypt = Bcrypt(app)
@@ -165,6 +166,51 @@ class UserController():
                     "data": "Data format error"
                 }
             ),400
+
+    def logoutUser(request):
+        auth_token = AuthUtil.getAuthToken(request)
+        existingBlacklistToken = AuthUtil.checkBlacklistToken(auth_token)
+        if auth_token != None:
+            if existingBlacklistToken == None:
+                resp = AuthUtil.decode_auth_token(auth_token)
+                if not isinstance(resp, str):
+                    # mark the token as blacklisted
+                    blacklist_token = BlacklistToken(token=auth_token)
+                    try:
+                        # insert the token
+                        db.session.add(blacklist_token)
+                        db.session.commit()
+                        responseObject = {
+                            'status': 'success',
+                            'message': 'Successfully logged out.'
+                        }
+                        return (jsonify(responseObject)), 200
+                    except Exception as e:
+                        responseObject = {
+                            'status': 'fail',
+                            'message': e
+                        }
+                        return (jsonify(responseObject)), 200
+                else:
+                    responseObject = {
+                        'status': 'fail',
+                        'message': resp
+                    }
+                    return (jsonify(responseObject)), 401
+            else:
+                responseObject = {
+                        'status': 'fail',
+                        'message': 'Invalid Token'
+                    }
+                return (jsonify(responseObject)), 401
+
+        else:
+            return jsonify(
+                {
+                    "code": 401,
+                    "data": "Provide a valid auth token"
+                }
+            ), 401
             
     def getBankAccInfo(request):
         data = request.get_json()

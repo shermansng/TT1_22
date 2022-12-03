@@ -41,6 +41,9 @@ def retrieveUserDetails():
 def updateUserDetails():
     return UserController.updateUserDetails(request)
 
+@app.route("/user/logout", methods=["POST"])
+def logoutUser():
+    return UserController.logoutUser(request)
 @app.route("/user/bankaccounts", methods=["POST"])
 def getBankAccInfo():
     return UserController.getBankAccInfo(request)
