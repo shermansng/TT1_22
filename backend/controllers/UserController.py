@@ -252,11 +252,16 @@ class UserController():
             ), 200
             
     def getBankAccInfo(request):
+        # Receive the userid from the request
         data = request.get_json()
-        user_bank_acc_data = BankAccount.query.filter_by(UserID=data["userid"]).all()
-        
+
         try:
-            if user_bank_acc_data == None:
+            # Retrieve the user data according to userid from BankAccount Table
+            # Include query within try block to catch any errors
+            user_bank_acc_data = BankAccount.query.filter_by(UserID=data["userid"]).all()
+
+            # if userid returns empty list, it means the user does not exist, return 404
+            if user_bank_acc_data == []:
                 return jsonify({
                     "code": 404,
                     "data": {
@@ -264,6 +269,8 @@ class UserController():
                         "message": "User does not exist"
                     }
                 })
+
+            # if userid returns a pupolated list, it means the user exists, return 200 and data retrieved
             else:
                 bank_acc_data = []
                 
@@ -277,11 +284,13 @@ class UserController():
                     "data": bank_acc_data
                     
                 })
+        
+        # catch any request error and return 500
         except Exception as error:
             print(error)
             return jsonify(
                 {
-                    "code": 400,
-                    "data": "Data format error"
+                    "code": 500,
+                    "data": "Please check your POST request values"
                 }
-            ),400
+            ),500
