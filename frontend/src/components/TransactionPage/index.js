@@ -52,22 +52,24 @@ export default function ScheduledTransactionsTable() {
       const payload = {
           "accountID":accountId
       };
-      console.log(payload)
-      try {
-          await axios.post('http://ec2-13-215-211-254.ap-southeast-1.compute.amazonaws.com/transactions/byAccount', payload, {
-            headers: {
-              "Authorization": `Bearer ${sessionStorage.getItem("token")}`
-            }
-          })
-            .then((response) => {
-              console.log(response.data.data)
-              const mappedData = response.data.data.map(x => createData(x.TransactionID,x.AccountID,x.ReceivingAccountID,x.Date,x.TransactionAmount,x.Comment))
-              setRows(mappedData)
-            });
-      } catch (err) {
-          console.log(err);
-          return false;
-      }
+    //   console.log(payload)
+    //   try {
+    //       await axios.post('http://ec2-13-215-211-254.ap-southeast-1.compute.amazonaws.com/transactions/byAccount', payload, {
+    //         headers: {
+    //           "Authorization": `Bearer ${sessionStorage.getItem("token")}`
+    //         }
+    //       })
+    //         .then((response) => {
+    //           console.log(response.data.data)
+    //           const mappedData = response.data.data.map(x => createData(x.TransactionID,x.AccountID,x.ReceivingAccountID,x.Date,x.TransactionAmount,x.Comment))
+    //           setRows(mappedData)
+    //         });
+    //   } catch (err) {
+    //       console.log(err);
+    //       return false;
+    //   }
+    const mappedData = JSON.parse(sessionStorage.getItem("accountIds")).map(x => createData(x.TransactionID, x.AccountID, x.ReceivingAccountID, x.TransactionAmount,x.Comment));
+    setRows(mappedData);
   }
 
     // call the function

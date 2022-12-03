@@ -28,7 +28,7 @@ const Login = () => {
             navigate("/home")
             sessionStorage.setItem("id",id)
             let accountIds = await getAccIds(id);
-            sessionStorage.setItem("accountIds", accountIds);
+            sessionStorage.setItem("accountIds", JSON.stringify(accountIds));
         } else {
             console.log("Login failed");
             // login failure
