@@ -18,220 +18,61 @@ import Tooltip from "@mui/material/Tooltip";
 import {NavBar} from "../NavBar/index";
 import{ConfirmationPopUp} from "../ConfirmationPopUp";
 import { visuallyHidden } from "@mui/utils";
-
-// function to format data received
-function createData(id, accountId, receivingAccountId, date, money, comment) {
-  return {
-    id,
-    accountId,
-    receivingAccountId,
-    date,
-    money,
-    comment
-  };
-}
-
-const rows = [
-  createData(1, 15975856, 6859694, "2022-11-08" ,500.00, 'Monthly Pocket Money'),
-  createData(2, 15975857, 6859694, "2022-11-09" ,503.00, 'Business'),
-  createData(3, 15975858, 6859694, "2022-11-08" ,501.00, 'Monthly Pocket Money'),
-  createData(4, 15975856, 6859694, "2022-11-10" ,502.00, 'Monthly Pocket Money'),
-  createData(5, 15975856, 6859694, "2022-11-08" ,500.00, 'Monthly Pocket Money'),
-  createData(6, 15975856, 6859694, "2022-11-08" ,500.00, 'Monthly Pocket Money'),
-];
-
-// comparator for sorting
-function descendingComparator(a, b, orderBy) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
-  return 0;
-}
-
-// alternate between asc and desc order
-function getComparator(order, orderBy) {
-  return order === "desc"
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
-}
-
-function stableSort(array, comparator) {
-  const stabilizedThis = array.map((el, index) => [el, index]);
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) {
-      return order;
-    }
-    return a[1] - b[1];
-  });
-  return stabilizedThis.map((el) => el[0]);
-}
-
-//header for table
-const headCells = [
-  {
-    id: "id",
-    numeric: false,
-    disablePadding: true,
-    label: "ID"
-  },
-  {
-    id: "accountId",
-    numeric: true,
-    disablePadding: false,
-    label: "AccountID"
-  },
-  {
-    id: "receivingAccountId",
-    numeric: true,
-    disablePadding: false,
-    label: "Receiving AccountId"
-  },
-  {
-    id: "date",
-    numeric: true,
-    disablePadding: false,
-    label: "Date"
-  },
-  {
-    id: "money",
-    numeric: true,
-    disablePadding: false,
-    label: "Money"
-  },
-  {
-    id: "comment",
-    numeric: true,
-    disablePadding: false,
-    label: "Comment"
-  }
-];
-
-function ScheduledTransactionsTableHead(props) {
-  const {
-    onSelectAllClick,
-    order,
-    orderBy,
-    numSelected,
-    rowCount,
-    onRequestSort
-  } = props;
-  const createSortHandler = (property) => (event) => {
-    onRequestSort(event, property);
-  };
-
-  return (
-    <TableHead>
-      <TableRow>
-        <TableCell padding="checkbox">
-          <Checkbox
-            color="primary"
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{
-              "aria-label": "select all desserts"
-            }}
-          />
-        </TableCell>
-        {headCells.map((headCell) => (
-          <TableCell
-            key={headCell.id}
-            align={headCell.numeric ? "right" : "left"}
-            padding={headCell.disablePadding ? "none" : "normal"}
-            sortDirection={orderBy === headCell.id ? order : false}
-          >
-            <TableSortLabel
-              active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : "asc"}
-              onClick={createSortHandler(headCell.id)}
-            >
-              {headCell.label}
-              {orderBy === headCell.id ? (
-                <Box component="span" sx={visuallyHidden}>
-                  {order === "desc" ? "sorted descending" : "sorted ascending"}
-                </Box>
-              ) : null}
-            </TableSortLabel>
-          </TableCell>
-        ))}
-      </TableRow>
-    </TableHead>
-  );
-}
-
-ScheduledTransactionsTableHead.propTypes = {
-  numSelected: PropTypes.number.isRequired,
-  onRequestSort: PropTypes.func.isRequired,
-  onSelectAllClick: PropTypes.func.isRequired,
-  order: PropTypes.oneOf(["asc", "desc"]).isRequired,
-  orderBy: PropTypes.string.isRequired,
-  rowCount: PropTypes.number.isRequired
-};
-
-function ScheduledTransactionsTableToolbar(props) {
-  const { numSelected } = props;
-
-  return (
-    <Toolbar
-      sx={{
-        pl: { sm: 2 },
-        pr: { xs: 1, sm: 1 },
-        ...(numSelected > 0 && {
-          bgcolor: (theme) =>
-            alpha(
-              theme.palette.primary.main,
-              theme.palette.action.activatedOpacity
-            )
-        })
-      }}
-    >
-      {numSelected > 0 ? (
-        <Typography
-          sx={{ flex: "1 1 100%" }}
-          color="inherit"
-          variant="subtitle1"
-          component="div"
-        >
-          {numSelected} selected
-        </Typography>
-      ) : (
-        <Typography
-          sx={{ flex: "1 1 100%" }}
-          variant="h6"
-          id="tableTitle"
-          component="div"
-        >
-          Scheduled Transactions
-        </Typography>
-      )}
-
-      {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <ConfirmationPopUp />
-        </Tooltip>
-      ) : (
-        <div></div>
-      )}
-    </Toolbar>
-  );
-}
-
-ScheduledTransactionsTableToolbar.propTypes = {
-  numSelected: PropTypes.number.isRequired
-};
+import getTransactions from "api/userTxnHistoryGet";
+import AddIcon from '@mui/icons-material/Add';
+import { IconButton } from "@mui/material";
+import axios from "axios";
 
 export default function ScheduledTransactionsTable() {
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("id");
   const [selected, setSelected] = React.useState([]);
-console.log(selected)
   const [page, setPage] = React.useState(0);
+  const [data, setData] = React.useState([]);
+  const [rows, setRows]  = React.useState([]);
 
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
+  // function to format data received
+  function createData(id, accountId, receivingAccountId, date, money, comment) {
+    return {
+      id,
+      accountId,
+      receivingAccountId,
+      date,
+      money,
+      comment
+    };
+  }
+
+
+  React.useEffect(() => {
+    const getTransactions = async (accountId) => {
+      console.log(`AccountID: ${accountId}`);
+      const payload = {
+          "accountID":accountId
+      };
+      console.log(payload)
+      try {
+          await axios.post('http://ec2-13-215-211-254.ap-southeast-1.compute.amazonaws.com/transactions/byAccount', payload, {
+            headers: { 
+              "Authorization": `Bearer ${sessionStorage.getItem("token")}`
+            }
+          })
+            .then((response) => {
+              console.log(response.data.data)
+              const mappedData = response.data.data.map(x => createData(x.TransactionID,x.AccountID,x.ReceivingAccountID,x.Date,x.TransactionAmount,x.Comment))
+              setRows(mappedData)
+            });
+      } catch (err) {
+          console.log(err);
+          return false;
+      }
+  }
+  
+    // call the function
+    getTransactions(828120424)
+  }, [])
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -282,6 +123,195 @@ console.log(selected)
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+
+  // comparator for sorting
+  function descendingComparator(a, b, orderBy) {
+    if (b[orderBy] < a[orderBy]) {
+      return -1;
+    }
+    if (b[orderBy] > a[orderBy]) {
+      return 1;
+    }
+    return 0;
+  }
+
+  // alternate between asc and desc order
+  function getComparator(order, orderBy) {
+    return order === "desc"
+      ? (a, b) => descendingComparator(a, b, orderBy)
+      : (a, b) => -descendingComparator(a, b, orderBy);
+  }
+
+  function stableSort(array, comparator) {
+    const stabilizedThis = array.map((el, index) => [el, index]);
+    stabilizedThis.sort((a, b) => {
+      const order = comparator(a[0], b[0]);
+      if (order !== 0) {
+        return order;
+      }
+      return a[1] - b[1];
+    });
+    return stabilizedThis.map((el) => el[0]);
+  }
+
+  //header for table
+  const headCells = [
+    {
+      id: "id",
+      numeric: false,
+      disablePadding: true,
+      label: "ID"
+    },
+    {
+      id: "accountId",
+      numeric: true,
+      disablePadding: false,
+      label: "AccountID"
+    },
+    {
+      id: "receivingAccountId",
+      numeric: true,
+      disablePadding: false,
+      label: "Receiving AccountId"
+    },
+    {
+      id: "date",
+      numeric: true,
+      disablePadding: false,
+      label: "Date"
+    },
+    {
+      id: "money",
+      numeric: true,
+      disablePadding: false,
+      label: "Money"
+    },
+    {
+      id: "comment",
+      numeric: true,
+      disablePadding: false,
+      label: "Comment"
+    }
+  ];
+
+  function ScheduledTransactionsTableHead(props) {
+    const {
+      onSelectAllClick,
+      order,
+      orderBy,
+      numSelected,
+      rowCount,
+      onRequestSort
+    } = props;
+    const createSortHandler = (property) => (event) => {
+      onRequestSort(event, property);
+    };
+
+    return (
+      <TableHead>
+        <TableRow>
+          <TableCell padding="checkbox">
+            <Checkbox
+              color="primary"
+              indeterminate={numSelected > 0 && numSelected < rowCount}
+              checked={rowCount > 0 && numSelected === rowCount}
+              onChange={onSelectAllClick}
+              inputProps={{
+                "aria-label": "select all desserts"
+              }}
+            />
+          </TableCell>
+          {headCells.map((headCell) => (
+            <TableCell
+              key={headCell.id}
+              align={headCell.numeric ? "right" : "left"}
+              padding={headCell.disablePadding ? "none" : "normal"}
+              sortDirection={orderBy === headCell.id ? order : false}
+            >
+              <TableSortLabel
+                active={orderBy === headCell.id}
+                direction={orderBy === headCell.id ? order : "asc"}
+                onClick={createSortHandler(headCell.id)}
+              >
+                {headCell.label}
+                {orderBy === headCell.id ? (
+                  <Box component="span" sx={visuallyHidden}>
+                    {order === "desc" ? "sorted descending" : "sorted ascending"}
+                  </Box>
+                ) : null}
+              </TableSortLabel>
+            </TableCell>
+          ))}
+        </TableRow>
+      </TableHead>
+    );
+  }
+
+  ScheduledTransactionsTableHead.propTypes = {
+    numSelected: PropTypes.number.isRequired,
+    onRequestSort: PropTypes.func.isRequired,
+    onSelectAllClick: PropTypes.func.isRequired,
+    order: PropTypes.oneOf(["asc", "desc"]).isRequired,
+    orderBy: PropTypes.string.isRequired,
+    rowCount: PropTypes.number.isRequired
+  };
+
+  function ScheduledTransactionsTableToolbar(props) {
+    const { numSelected } = props;
+
+    return (
+      <Toolbar
+        sx={{
+          pl: { sm: 2 },
+          pr: { xs: 1, sm: 1 },
+          ...(numSelected > 0 && {
+            bgcolor: (theme) =>
+              alpha(
+                theme.palette.primary.main,
+                theme.palette.action.activatedOpacity
+              )
+          })
+        }}
+      >
+        {numSelected > 0 ? (
+          <Typography
+            sx={{ flex: "1 1 100%" }}
+            color="inherit"
+            variant="subtitle1"
+            component="div"
+          >
+            {numSelected} selected
+          </Typography>
+        ) : (
+          <Typography
+            sx={{ flex: "1 1 100%" }}
+            variant="h6"
+            id="tableTitle"
+            component="div"
+          >
+            Scheduled Transactions
+          </Typography>
+        )}
+
+        {numSelected > 0 ? (
+          <Tooltip title="Delete Scheduled Transactions">
+            <ConfirmationPopUp />
+          </Tooltip>
+        ) : (
+          <Tooltip title="Add Scheduled Transactions">
+            <IconButton>
+              <AddIcon/>
+            </IconButton>
+          </Tooltip>
+        )}
+      </Toolbar>
+    );
+  }
+
+  ScheduledTransactionsTableToolbar.propTypes = {
+    numSelected: PropTypes.number.isRequired
+  };
+
   return (
     <Box sx={{ width: "100%" }}>
       <NavBar />
