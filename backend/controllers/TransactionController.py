@@ -3,7 +3,7 @@ from config import app, db
 from models.ScheduledTransaction import ScheduledTransaction
 
 class TransactionController():
-    def getTransaction(request):
+    def getTransactionsByAccount(request):
 
         if request.method == "GET":
                 
