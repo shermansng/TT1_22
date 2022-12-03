@@ -67,49 +67,76 @@ class UserController():
 
     def retrieveUserDetails(request):
         data = request.get_json()
-        try:
-            if len(data) > 0:
-                try:
-                    user_data = User.query.filter_by(UserID=data["id"]).first()
-                    print(user_data)    
-                    if user_data == None:
-                        return jsonify({
-                            "code": 404,
-                            "data": {
-                                "status": "fail",
-                                "message": "User details not found"
-                            }
-                        })
 
-                    else:
-                       return jsonify({
-                            "code": 200,
-                            "data": {
-                                "firstName": user_data.Firstname,
-                                "lastName": user_data.Lastname,
-                                "email": user_data.Email,
-                                "address": user_data.Address,
-                                "optIntoPhyStatements": user_data.OptIntoPhyStatements
+        auth_token = AuthUtil.getAuthToken(request)
+        existingBlacklistToken = AuthUtil.checkBlacklistToken(auth_token)
+        if auth_token != None:
+            if existingBlacklistToken == None:
+                resp = AuthUtil.decode_auth_token(auth_token)
+                if not isinstance(resp, str):
+                    try:
+                        if len(data) > 0:
+                            try:
+                                user_data = User.query.filter_by(UserID=data["id"]).first()
+                                print(user_data)    
+                                if user_data == None:
+                                    return jsonify({
+                                        "code": 404,
+                                        "data": {
+                                            "status": "fail",
+                                            "message": "User details not found"
+                                        }
+                                    })
 
+                                else:
+                                    return jsonify({
+                                            "code": 200,
+                                            "data": {
+                                                "firstName": user_data.Firstname,
+                                                "lastName": user_data.Lastname,
+                                                "email": user_data.Email,
+                                                "address": user_data.Address,
+                                                "optIntoPhyStatements": user_data.OptIntoPhyStatements
+
+                                            }
+                                        })
+                                
+                            except Exception as error:
+                                print(error)
+                                return jsonify(
+                                    {
+                                        "code": 500,
+                                        "data": "Retreive User info error. Please contact the administrator"
+                                    }
+                                ),500
+                    except Exception as error:
+                        print(error)
+                        return jsonify(
+                            {
+                                "code": 400,
+                                "data": "Data format error"
                             }
-                        })
-                    
-                except Exception as error:
-                    print(error)
-                    return jsonify(
-                        {
-                            "code": 500,
-                            "data": "Retreive User info error. Please contact the administrator"
-                        }
-                    ),500
-        except Exception as error:
-            print(error)
-            return jsonify(
-                {
-                    "code": 400,
-                    "data": "Data format error"
-                }
-            ),400
+                        ),400
+                else:
+                    responseObject = {
+                        'status': 'fail',
+                        'message': resp
+                    }
+                    return (jsonify(responseObject)), 401
+            else:
+                responseObject = {
+                        'status': 'fail',
+                        'message': 'Invalid Token'
+                    }
+                return (jsonify(responseObject)), 401
+        else:
+            responseObject = {
+                "code": 401,
+                'message': 'Provide a valid auth token'
+            }
+            return (jsonify(responseObject)), 401
+
+        
 
     def updateUserDetails(request):
         data = request.get_json()

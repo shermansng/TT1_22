@@ -27,7 +27,7 @@ def getTransactionsByAccount():
     uuid = str(uuid4())
     APITransactionLogUtil.insertLog("GET Transactions", request.get_json(), None, uuid)
     response = TransactionController.getTransactionsByAccount(request)
-    APITransactionLogUtil.insertLog("User Auth", request.get_data(), response.get_data(), uuid)
+    # APITransactionLogUtil.insertLog("User Auth", request.get_data(), response.get_data(), uuid)
     return response
 
 @app.route("/user/login", methods=["POST"])
@@ -35,7 +35,7 @@ def authUser():
     uuid = str(uuid4())
     APITransactionLogUtil.insertLog("User Auth", request.get_json(), None, uuid)
     response = UserController.authUser(request)
-    APITransactionLogUtil.insertLog("User Auth", request.get_data(), response.get_data(), uuid)
+    # APITransactionLogUtil.insertLog("User Auth", request.get_data(), response.get_data(), uuid)
     return response
 
 @app.route("/user/info", methods=["POST"])
@@ -43,7 +43,7 @@ def retrieveUserDetails():
     uuid = str(uuid4())
     APITransactionLogUtil.insertLog("User Info", request.get_json(), None, uuid)
     response = UserController.retrieveUserDetails(request)
-    APITransactionLogUtil.insertLog("User Info", request.get_data(), response.get_data(), uuid)
+    # APITransactionLogUtil.insertLog("User Info", request.get_data(), response.get_data(), uuid)
     return response
 
 @app.route("/user/updateInfo", methods=["POST"])
@@ -51,7 +51,7 @@ def updateUserDetails():
     uuid = str(uuid4())
     APITransactionLogUtil.insertLog("UPDATE User Info", request.get_json(), None, uuid)
     response = UserController.updateUserDetails(request)
-    APITransactionLogUtil.insertLog("UPDATE User Info", request.get_data(), response.get_data(), uuid)
+    # APITransactionLogUtil.insertLog("UPDATE User Info", request.get_data(), response.get_data(), uuid)
     return response
 
 @app.route("/user/logout", methods=["POST"])
@@ -66,7 +66,7 @@ def getBankAccInfo():
     uuid = str(uuid4())
     APITransactionLogUtil.insertLog("Get Bank Account Info", request.get_json(), None, uuid)
     response = UserController.getBankAccInfo(request)
-    APITransactionLogUtil.insertLog("Get Bank Account Info", request.get_data(), response.get_data(), uuid)
+    # APITransactionLogUtil.insertLog("Get Bank Account Info", request.get_data(), response.get_data(), uuid)
     return response
 
 if __name__ == '__main__':
