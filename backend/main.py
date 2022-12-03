@@ -28,8 +28,6 @@ def getTransaction():
 @app.route("/transactionsByAccount" , methods=["POST"])
 def getTransactionsByAccount():
      return TransactionController.getTransactionsByAccount(request)
-
-
     
 @app.route("/user/login", methods=["POST"])
 def authUser():
@@ -38,6 +36,14 @@ def authUser():
 @app.route("/user/info", methods=["POST"])
 def retrieveUserDetails():
     return UserController.retrieveUserDetails(request)
+
+@app.route("/user/updateInfo", methods=["POST"])
+def updateUserDetails():
+    return UserController.updateUserDetails(request)
+
+@app.route("/user/bankaccounts", methods=["POST"])
+def getBankAccInfo():
+    return UserController.getBankAccInfo(request)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5003, debug=True)
