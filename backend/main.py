@@ -69,5 +69,15 @@ def getBankAccInfo():
     # APITransactionLogUtil.insertLog("Get Bank Account Info", request.get_data(), response.get_data(), uuid)
     return response
 
+#insert transaction by 
+@app.route("/transactions/insert", methods=['POST'])
+def insertTransaction():
+     return TransactionController.insert_transaction(request)
+
+#delete transaction by 
+@app.route("/transactions/delete", methods=['GET', 'DELETE'])
+def deleteTransaction():
+     return TransactionController.delete_Transaction(request)
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5003, debug=True)
