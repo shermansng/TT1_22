@@ -31,6 +31,8 @@ class UserController():
                             "code": 200,
                             "data": {
                                 "status": "success",
+                                "firstName": user_data.Firstname,
+                                "lastName": user_data.Lastname,
                                 "token": auth_token.decode("utf-8")
                             }
                         })
