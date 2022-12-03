@@ -5,7 +5,7 @@ class BlacklistToken(db.Model):
     """
     Token Model for storing JWT tokens when logout before expiry
     """
-    __tablename__ = 'blacklist_tokens'
+    __tablename__ = 'BlacklistToken'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     token = db.Column(db.String(500), unique=True, nullable=False)

@@ -5,7 +5,8 @@ from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from flask_cors import CORS
-
+from util.APITransactionLogUtil import APITransactionLogUtil
+from uuid import uuid4
 
 app = config.app
 CORS(app)
@@ -19,18 +20,54 @@ def test_api():
         }
     )
 
-#get transaction by 
-@app.route("/transactions")
-def getTransaction():
-     return TransactionController.getTransaction(request)
-    
+
+#get transactions by bank account id
+@app.route("/transactions/byAccount" , methods=["POST"])
+def getTransactionsByAccount():
+    uuid = str(uuid4())
+    APITransactionLogUtil.insertLog("GET Transactions", request.get_json(), None, uuid)
+    response = TransactionController.getTransactionsByAccount(request)
+    APITransactionLogUtil.insertLog("User Auth", request.get_data(), response.get_data(), uuid)
+    return response
+
 @app.route("/user/login", methods=["POST"])
 def authUser():
-    return UserController.authUser(request)
+    uuid = str(uuid4())
+    APITransactionLogUtil.insertLog("User Auth", request.get_json(), None, uuid)
+    response = UserController.authUser(request)
+    APITransactionLogUtil.insertLog("User Auth", request.get_data(), response.get_data(), uuid)
+    return response
 
 @app.route("/user/info", methods=["POST"])
 def retrieveUserDetails():
-    return UserController.retrieveUserDetails(request)
+    uuid = str(uuid4())
+    APITransactionLogUtil.insertLog("User Info", request.get_json(), None, uuid)
+    response = UserController.retrieveUserDetails(request)
+    APITransactionLogUtil.insertLog("User Info", request.get_data(), response.get_data(), uuid)
+    return response
+
+@app.route("/user/updateInfo", methods=["POST"])
+def updateUserDetails():
+    uuid = str(uuid4())
+    APITransactionLogUtil.insertLog("UPDATE User Info", request.get_json(), None, uuid)
+    response = UserController.updateUserDetails(request)
+    APITransactionLogUtil.insertLog("UPDATE User Info", request.get_data(), response.get_data(), uuid)
+    return response
+
+@app.route("/user/logout", methods=["POST"])
+def logoutUser():
+    uuid = str(uuid4())
+    APITransactionLogUtil.insertLog("LOGOUT", None, None, uuid)
+    response = UserController.logoutUser(request)
+    return response
+
+@app.route("/user/bankaccounts", methods=["POST"])
+def getBankAccInfo():
+    uuid = str(uuid4())
+    APITransactionLogUtil.insertLog("Get Bank Account Info", request.get_json(), None, uuid)
+    response = UserController.getBankAccInfo(request)
+    APITransactionLogUtil.insertLog("Get Bank Account Info", request.get_data(), response.get_data(), uuid)
+    return response
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5003, debug=True)
