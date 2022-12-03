@@ -19,7 +19,8 @@ const authenticateUser = async (username, password) => {
 
     try {
         let res = await axios.post(endpoint, payload);
-        let data = res.data;
+        let data = res.data.data;
+        console.log(data);
         if (data.status === 'success') {
             session.token = data.token;
             session.userid = data.id;

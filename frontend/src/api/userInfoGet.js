@@ -12,11 +12,9 @@ const endpoint = `${URL}/user/info`
  *     optIntoPhyStatements,
  * }
  */
-const getUserInfo = async (id, email, address) => {
+const getUserInfo = async (id) => {
     const payload = {
-        id,
-        email,
-        address,
+        id
     }
     try {
         let axiosres = await axios.post(endpoint, payload);
