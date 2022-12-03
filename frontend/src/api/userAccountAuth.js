@@ -1,6 +1,5 @@
 import axios from 'axios';
 import {URL} from './apiConstant';
-import session from './session';
 
 const endpoint = `${URL}/user/login`;
 
@@ -20,10 +19,8 @@ const authenticateUser = async (username, password) => {
     try {
         let res = await axios.post(endpoint, payload);
         let data = res.data.data;
-        console.log(data);
         if (data.status === 'success') {
-            session.token = data.token;
-            session.userid = data.id;
+            sessionStorage.setItem("token", data.token);
             return data.id;
         } else if (data.status === 'fail') {
             console.log(data.message);

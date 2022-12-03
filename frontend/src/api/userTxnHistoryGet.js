@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { URL } from './apiConstant';
+import { URL, getHeader } from './apiConstant';
 
 const endpoint = `${URL}/transactions/byAccount`;
 
@@ -10,7 +10,9 @@ const getTransactions = async (accountId) => {
     };
     console.log(payload)
     try {
-        let res = await axios.post(endpoint, payload);
+        let res = await axios.post(endpoint, payload, {
+            headers: getHeader()
+        });
         let data = res.data;
         console.log(data)
         if (data.code === 200) {

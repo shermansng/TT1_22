@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {URL} from './apiConstant';
+import {URL, getHeader} from './apiConstant'
 
 const ep = `${URL}/user/updateInfo`;
 
@@ -10,7 +10,9 @@ const updateUserInfo = async (id, email, password) => {
         password,
     }
     try {
-        let res = await axios.post(ep, payload);
+        let res = await axios.post(ep, payload, {
+            headers: getHeader()
+        });
         let data = res.data;
         if (data.code === 200) {
             return true;
