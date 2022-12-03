@@ -1,10 +1,10 @@
 import * as React from "react";
-import test from '../../api/axiosTest';
+import {NavBar} from "../NavBar/index"
 
 const About = () => {
-    test();
   return (
     <div>
+      <NavBar/>
       <h1>About</h1>
     </div>
   );

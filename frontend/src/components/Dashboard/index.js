@@ -1,5 +1,6 @@
 import React from "react";
 import { useState } from "react";
+import {NavBar} from "../NavBar/index"
 
 const Dashboard = () => {
   // const [user, setUser] = useState({
@@ -10,6 +11,7 @@ const Dashboard = () => {
   const [password, setPassword] = useState("");
   return (
     <div>
+      <NavBar/>
       <h1>Dashboard</h1>
       Username:
       <input
