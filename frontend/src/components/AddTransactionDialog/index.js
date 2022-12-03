@@ -8,12 +8,16 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 export const AddTransactionDialog = React.forwardRef(() => {
   const [open, setOpen] = React.useState(false);
   const [accountId, setAccountId] = React.useState("");
   const [receivingAccountId, setReceivingAccountId] = React.useState("");
-  const [date, setDate] = React.useState("");
+  // const [date, setDate] = React.useState("");
+  const [date, setDate] = React.useState(new Date())
   const [amount, setAmount] = React.useState("");
   const [comment, setComment] = React.useState("");
   
@@ -52,6 +56,7 @@ export const AddTransactionDialog = React.forwardRef(() => {
   
 
   return (
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
     <div>
       <IconButton onClick={handleClickOpen}>
         <AddIcon/>
@@ -82,15 +87,21 @@ export const AddTransactionDialog = React.forwardRef(() => {
             fullWidth
             variant="standard"
           />
-          <TextField
+          {/* <TextField
             autoFocus
             margin="dense"
             id="date"
             label="Date"
             type="text"
-            onChange={(newValue) => setDate(newValue.target.value)}
+            // onChange={(newValue) => setDate(newValue)}
             fullWidth
             variant="standard"
+          /> */}
+          <DateTimePicker
+          label="Date&Time picker"
+          value={date}
+          onChange={(newValue) => setDate(newValue)}
+          renderInput={(params) => <TextField {...params} />}
           />
           <TextField
             autoFocus
@@ -119,5 +130,6 @@ export const AddTransactionDialog = React.forwardRef(() => {
         </DialogActions>
       </Dialog>
     </div>
+    </LocalizationProvider>
   );
 })
