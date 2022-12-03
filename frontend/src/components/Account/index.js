@@ -3,8 +3,10 @@ import {NavBar} from "../NavBar/index"
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
 import InputLabel from '@mui/material/InputLabel';
+import Button from '@mui/material/Button';
+import "./Account.css"
 
-function Account()
+const Account = () => 
 {
     // GET, POST, DELETE of address and email    
     
@@ -18,18 +20,25 @@ function Account()
     return (
       <div>
         <NavBar/>
-        <div id="Body">
-          <h1>Account</h1>
+        <div className="account_container">
+          <h1>User Details</h1>
           
           {/*Display FirstName + LastName */}
-          <FormControl variant="standard">
-            <InputLabel htmlFor="component-simple">Username</InputLabel>
-            <Input id="component-simple" value={username} onChange={(e) => {setUsername(e.target.value)}}/>
-          </FormControl>
-          <FormControl variant="standard">
-            <InputLabel htmlFor="component-simple">Address</InputLabel>
-            <Input id="component-simple" value={address} onChange={(e) => {setAddress(e.target.value)}}/>
-          </FormControl>
+          <div className="account_username">
+            <FormControl variant="standard">
+              <InputLabel htmlFor="component-simple">Username:</InputLabel>
+              <Input id="component-simple" value={username} onChange={(e) => {setUsername(e.target.value)}}/>
+            </FormControl>
+          </div>
+          
+          <div className="account_address">
+            <FormControl variant="standard">
+              <InputLabel htmlFor="component-simple">Address:</InputLabel>
+              <Input id="component-simple" value={address} onChange={(e) => {setAddress(e.target.value)}}/>
+            </FormControl>
+          </div>
+
+          <Button variant="contained" size="small" color="secondary" className="account_button_save">Save</Button>
         </div>
       </div>
     );
