@@ -1,5 +1,5 @@
 const session = {
-    user: {},
+    userid: "",
     token: "",
 };
 
