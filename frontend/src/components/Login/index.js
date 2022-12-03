@@ -2,26 +2,33 @@ import React, {useState, useEffect, useRef} from 'react';
 import { Link, useNavigate } from 'react-router-dom'
 import './Login.css';
 import { Button, TextField } from '@mui/material';
+import authUser from '../../api/userAccountAuth';
+import userInfoGet from '../../api/userInfoGet';
 
 const Login = () => {
 
-    const [email,setEmail] = useState("");
+    const [username ,setEmail] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
 
-    const login = () => {
-        navigate("/home")
+    const login = async () => {
+        let id = await authUser(username, password);
+        if (id) {
+            navigate("/home")
+        } else {
+            // login failure
+        }
     }
 
     return (
         <div className="login">
             <div className="login__container">
                 <input
-                    type="email"
+                    type="text"
                     className="login__textBox"
-                    value={email}
+                    value={username}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Email"
+                    placeholder="Username"
                 />
                 <input
                     type="password"
@@ -30,7 +37,7 @@ const Login = () => {
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="Password"
                 />
-                <Button variant="contained" 
+                <Button variant="contained"
                         onClick = {login} >
                 Login
                 </Button>
@@ -73,14 +80,14 @@ const Login = () => {
 //     <div className='login'>
 //         <form action="">
 //             <h1>Sign in</h1>
-//             <input 
+//             <input
 //                 // onChange={(event)=>{setRegisterEmail(event.target.value)}}
-//                 onChange={(event)=>{setLoginEmail(event.target.value)}} 
+//                 onChange={(event)=>{setLoginEmail(event.target.value)}}
 //                 type="email"
 //             />
-//             <input 
+//             <input
 //                 // onChange={(event)=>{setRegisterPassword(event.target.value)}}
-//                 onChange={(event)=>{setLoginPassword(event.target.value)}} 
+//                 onChange={(event)=>{setLoginPassword(event.target.value)}}
 //                 type="password"
 //             />
 //             <button onClick={login}>Sign in</button>

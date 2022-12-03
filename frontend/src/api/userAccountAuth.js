@@ -5,12 +5,13 @@ import session from './session';
 const endpoint = `${URL}/user/login`;
 
 /**
- * 
+ *
  * @param {*} username
  * @param {*} password
  * @returns id of the user if authenticated, else returns false;
  */
 const authenticateUser = async (username, password) => {
+    console.log(`Username: ${username}, password: ${password}`);
     const payload = {
         username,
         password
