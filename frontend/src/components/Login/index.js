@@ -14,8 +14,10 @@ const Login = () => {
     const login = async () => {
         let id = await authUser(username, password);
         if (id) {
+            console.log("Login success");
             navigate("/home")
         } else {
+            console.log("Login failed");
             // login failure
         }
     }
