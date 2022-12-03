@@ -33,6 +33,8 @@ color: white;
 }
 
 .navbar_signout{
+    background: red;
     float: right;
-    margin: 14px 16px;
+    margin: 10px;
+    font-size: 10px;
 }
