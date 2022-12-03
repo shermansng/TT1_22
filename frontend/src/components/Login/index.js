@@ -5,6 +5,7 @@ import { Button, TextField } from '@mui/material';
 import authUser from '../../api/userAccountAuth';
 import userInfoGet from '../../api/userInfoGet';
 import sessionLogout from "../../api/userLogout";
+import getAccIds from "../../api/bankAccountIds";
 
 const Login = () => {
 
@@ -26,6 +27,8 @@ const Login = () => {
             setTimeout(logout, 300000);
             navigate("/home")
             sessionStorage.setItem("id",id)
+            let accountIds = await getAccIds(id);
+            sessionStorage.setItem("accountIds", accountIds);
         } else {
             console.log("Login failed");
             // login failure
