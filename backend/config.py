@@ -8,7 +8,7 @@ load_dotenv()
 # SQLALCHEMY_DATABASE_URI = 'mysql+mysqlconnector://root@localhost:3306/testing'
 # SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-SECRET_KEY = os.getenv('SECRET_KEY')
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 app = Flask(__name__)
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/testing'
