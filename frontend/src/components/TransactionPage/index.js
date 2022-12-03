@@ -18,6 +18,7 @@ import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { visuallyHidden } from '@mui/utils';
+import {NavBar} from "../NavBar/index"
 
 // function to format data received
 function createData(id, accountId, receivingAccountId, date, amount,comment) {
@@ -88,19 +89,19 @@ const headCells = [
     id: 'date',
     numeric: true,
     disablePadding: false,
-    label: 'date',
+    label: 'Date',
   },
   {
     id: 'amount',
     numeric: true,
     disablePadding: false,
-    label: 'amount',
+    label: 'Amount',
   },
   {
     id: 'comment',
     numeric: true,
     disablePadding: false,
-    label: 'comment',
+    label: 'Comment',
   },
 ];
 
@@ -269,6 +270,7 @@ export default function EnhancedTable() {
 
   return (
     <Box sx={{ width: '100%' }}>
+      <NavBar />
       <Paper sx={{ width: '100%', mb: 2 }}>
         <EnhancedTableToolbar numSelected={selected.length} />
         <TableContainer>

@@ -13,10 +13,9 @@ function App() {
       <Routes>
           <Route path="/" element={<NavBar />} />
           <Route path="/home" element={<Home />} />
-          <Route path="/transaction" element={<Dashboard />} />
           <Route path="/account" element={<About />} />
           <Route path="/nomatch" element={<NoMatch />} />
-          <Route path="transaction" element = {<TransactionPage />} />
+          <Route path="/transaction" element = {<TransactionPage />} />
         </Routes>
     </div>
   );
