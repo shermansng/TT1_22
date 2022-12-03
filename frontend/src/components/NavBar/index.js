@@ -4,13 +4,6 @@ import { Link, useNavigate } from "react-router-dom";
 import "./NavBar.css"
 import sessionLogout from "../../api/userLogout";
 
-function Logout() {
-    const navigate = useNavigate();
-    sessionLogout();
-    sessionStorage.removeItem("token");
-    navigate('/');
-}
-
 function NavBar() {
 
   const navigate = useNavigate();
@@ -30,4 +23,4 @@ function NavBar() {
   );
 }
 
-export {NavBar, Logout};
+export {NavBar};
