@@ -19,7 +19,10 @@ class UserController():
                     if user_data == None:
                         return jsonify({
                             "code": 404,
-                            "data": "User not found"
+                            "data": {
+                                "status": "fail",
+                                "message": "User not found"
+                            }
                         })
 
                     if user_data.Password == data["password"]:
@@ -36,6 +39,7 @@ class UserController():
                             "code": 200,
                             "data": {
                                 "status": "fail",
+                                "message": "Invalid password"
                             }
                         })
                     
