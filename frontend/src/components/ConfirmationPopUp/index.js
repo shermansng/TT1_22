@@ -25,13 +25,14 @@ export const ConfirmationPopUp = React.forwardRef((value) => {
   // for deleting the scheduled transaction and closing the popup
   const handleDelete = () => {
     const deleteTransactions = async (id) => {
-      console.log(`ID: ${id}`);
+      console.log(id)
+      console.log(typeof id)
       const payload = {
-          "transactionID":id
+          "transactionID": JSON.parse(id)
       };
-      console.log(payload)
+      
       try {
-          await axios.delete('http://ec2-13-215-211-254.ap-southeast-1.compute.amazonaws.com/transactions/delete', payload)
+          axios.delete('http://ec2-13-215-211-254.ap-southeast-1.compute.amazonaws.com/transactions/delete', payload)
       } catch (err) {
           console.log(err);
           return false;

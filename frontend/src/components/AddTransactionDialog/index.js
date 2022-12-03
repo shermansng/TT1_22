@@ -33,10 +33,11 @@ export const AddTransactionDialog = React.forwardRef(() => {
 //         console.log(`AccountID: ${accountId}`);
 //         const payload = {
 //             "accountID":accountId
+"RECEIBIN"
 //         };
 //         console.log(payload)
 //         try {
-//             await axios.post('http://ec2-13-215-211-254.ap-southeast-1.compute.amazonaws.com/transactions/byAccount', payload, {
+//             await axios.post('http://ec2-13-215-211-254.ap-southeast-1.compute.amazonaws.com/transactions/INSERT', payload, {
 //               headers: { 
 //                 "Authorization": `Bearer ${sessionStorage.getItem("token")}`
 //               }

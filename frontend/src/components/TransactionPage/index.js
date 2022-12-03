@@ -48,6 +48,7 @@ export default function ScheduledTransactionsTable() {
 
   React.useEffect(() => {
     let rows = []
+    // unable to send array as payload through axios
     const getTransactions = async (accountId) => {
       console.log(`AccountID: ${accountId}`);
       const payload = {
