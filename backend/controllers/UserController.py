@@ -29,6 +29,13 @@ class UserController():
 
                     if user_data.Password == data["password"]:
                         auth_token = AuthUtil.encode_auth_token(user_data.Email)
+                        if user_data.LoginCount > 4:
+                            user_data.LoginCount = 0
+                            db.session.commit()
+                        else:
+                            user_data.LoginCount += 1
+                            db.session.commit()
+
                         return jsonify({
                             "code": 200,
                             "data": {
@@ -36,7 +43,8 @@ class UserController():
                                 "id": user_data.UserID,
                                 "firstName": user_data.Firstname,
                                 "lastName": user_data.Lastname,
-                                "token": auth_token.decode("utf-8")
+                                "token": auth_token.decode("utf-8"),
+                                "loginCount": user_data.LoginCount
                             }
                         })
                     else:
