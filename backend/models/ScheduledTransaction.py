@@ -6,7 +6,7 @@ from config import db
 class ScheduledTransaction(db.Model):
     __tablename__ = 'ScheduledTransactions'
 
-    TransactionID = Column(Integer, primary_key=True, nullable=False)
+    TransactionID = Column(Integer, primary_key=True, nullable=False, autoincrement=True)
     AccountID = Column(Integer, primary_key=True, nullable=False)
     ReceivingAccountID = Column(Integer)
     Date = Column(String(255))

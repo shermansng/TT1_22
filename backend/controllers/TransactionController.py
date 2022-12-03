@@ -28,7 +28,6 @@ class TransactionController():
         data = request.get_json()
         try:
             if len(data) > 0:
-                transactionID =  #leave as nan value to be auto populated
                 userID = data["userID"]
                 accountID =  data["accountID"] 
                 receivingaccountID = data['receivingaccountID'] 
@@ -40,23 +39,23 @@ class TransactionController():
 
 
                 #adding instance
-                scheduledtransaction = ScheduledTransaction(TransactionID = transactionID , AccountID = accountID, ReceivingAccountID = receivingaccountID,
+                scheduledtransaction = ScheduledTransaction(AccountID = accountID, ReceivingAccountID = receivingaccountID,
                                                             Date = date, TransactionAmount=transactionamount, Comment=comment)
 
                 #add transaction to db
-                app.db.session.add(scheduledtransaction)     
-                app.db.commit()                        
-            return jsonify({
-                        "code": 200,
-                        "data": {
-                            "transactionID":scheduledtransaction.TransactionID,
-                            "accountID ":  scheduledtransaction.accountID,
-                            "receivingaccountID": scheduledtransaction.receivingaccountID,
-                            "date":scheduledtransaction.date,
-                            "transactionamount":scheduledtransaction.transactionamount,
-                            "comment":scheduledtransaction.comment
-                        }
-                    })
+                db.session.add(scheduledtransaction)     
+                db.session.commit()                        
+                return jsonify({
+                    "code": 200,
+                    "data": {
+                        "transactionID":scheduledtransaction.TransactionID,
+                        "accountID ":  scheduledtransaction.AccountID,
+                        "receivingaccountID": scheduledtransaction.ReceivingAccountID,
+                        "date":scheduledtransaction.Date,
+                        "transactionamount":scheduledtransaction.TransactionAmount,
+                        "comment":scheduledtransaction.Comment
+                    }
+                })
         except Exception as error: 
             print(error)
             return jsonify(
@@ -66,34 +65,30 @@ class TransactionController():
                 }
             ),400
 
-    def delete(request): 
+    def delete_Transaction(request): 
         data = request.get_json()
         try:
             if len(data) > 0:
-                for i in data[transaction_id]:
-                    transaction = ScheduledTransaction.query.filter_by([i])
-                    if transaction == None:
-                                    return jsonify({
-                                        "code": 404,
-                                        "data": {
-                                            "status": "fail",
-                                            "message": "Transaction not found"
-                                        }
-                                    }),404
-                    else: 
-                        app.db.session.delete(transaction)
-                        app.db.session.commit()
+                for i in data["transactionID"]:
+                    transaction = ScheduledTransaction.query.filter_by(TransactionID=i).first()
+                    if transaction != None:
+                        db.session.delete(transaction)
+                        db.session.commit()
+                    
                         return jsonify({
-                        "code": 200,
-                        "data": {
-                            "transactionID":scheduledtransaction.TransactionID,
-                            "accountID ":  scheduledtransaction.accountID,
-                            "receivingaccountID": scheduledtransaction.receivingaccountID,
-                            "date":scheduledtransaction.date,
-                            "transactionamount":scheduledtransaction.transactionamount,
-                            "comment":scheduledtransaction.comment
-                                }
-                            })
+                            "code": 200,
+                            "data": {
+                                "message": "Deleted Successfully"
+                            }
+                        })
+                    else:
+                        return jsonify({
+                            "code": 200,
+                            "data": {
+                                "message": "No transactions deleted"
+                            }
+                        })
+
         except Exception as error: 
             print(error)
             return jsonify(
