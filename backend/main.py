@@ -79,5 +79,13 @@ def insertTransaction():
 def deleteTransaction():
      return TransactionController.delete_Transaction(request)
 
+@app.route("/user/accountid", methods=["POST"])
+def getAccountId():
+    uuid = str(uuid4())
+    APITransactionLogUtil.insertLog("Get account id info", request.get_json(), None, uuid)
+    response = UserController.getAccountId(request)
+    # APITransactionLogUtil.insertLog("Get Bank Account Info", request.get_data(), response.get_data(), uuid)
+    return response
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5003, debug=True)

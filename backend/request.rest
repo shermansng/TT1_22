@@ -22,3 +22,12 @@ Content-Type: application/json
 }
 
 ###
+
+POST http://127.0.0.1:5003/user/accountid
+Content-Type: application/json
+
+{
+    "userid": 1
+}
+
+###
