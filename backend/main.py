@@ -19,10 +19,6 @@ def test_api():
         }
     )
 
-#get all transactions
-@app.route("/transactions" , methods=["GET"])
-def getTransaction():
-     return TransactionController.getTransaction(request)
 
 #get transactions by bank account id
 @app.route("/transactions/byAccount" , methods=["POST"])
