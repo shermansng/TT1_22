@@ -1,13 +1,15 @@
-from flask import Flask, request, jsonify, url_for
+from flask import Flask, request, jsonify
 from config import app, db
 from models.ScheduledTransaction import ScheduledTransaction
 
 class TransactionController():
-
     def getTransactionsByAccount(request):
+
         data = request.get_json()
         try:
             transactionList = ScheduledTransaction.query.filter(ScheduledTransaction.AccountID == data["accountID"]).all()
+            result = [e.json() for e in transactionList]
+
             if len(transactionList):
                 result = [e.json() for e in transactionList]
                 return jsonify(
@@ -24,47 +26,6 @@ class TransactionController():
                 }
             )
 
-        except Exception as error:
-            print(error)
-            return jsonify(
-                {
-                    "code": 500,
-                    "data": "Data format error"
-                }
-            )
-
-        
-        
-
-
-    def insert_transaction(request): 
-        data = request.get_json()
-        try:
-            if len(data) > 0:
-                # transactionID =  #leave as nan value to be auto populated 
-                userID = data["userID"]
-                accountID =  data["accountID"] 
-                receivingaccountID = data['receivingaccountID'] 
-                date =  data['date'] 
-                transactionamount = data['transactionamount'] 
-                comment = data['comment'] 
-
-                scheduledtransaction = ScheduledTransaction(TransactionID = transactionID , AccountID = accountID, ReceivingAccountID = receivingaccountID,
-                                                            Date = date, TransactionAmount=transactionamount, Comment=comment)
-                #add transaction to db
-                app.db.session.add(scheduledtransaction)     
-                app.db.commit()                        
-            return jsonify({
-                        "code": 200,
-                        "data": {
-                            "transactionID":scheduledtransaction.TransactionID,
-                            "accountID ":  scheduledtransaction.accountID,
-                            "receivingaccountID": scheduledtransaction.receivingaccountID,
-                            "date":scheduledtransaction.date,
-                            "transactionamount":scheduledtransaction.transactionamount,
-                            "comment":scheduledtransaction.comment
-                        }
-                    })
         except Exception as error: 
             print(error)
             return jsonify(
@@ -74,24 +35,71 @@ class TransactionController():
                 }
             ),400
 
-    def delete(request): 
+    def insert_transaction(request): 
         data = request.get_json()
         try:
             if len(data) > 0:
-                transaction = ScheduledTransaction.query.filter_by(data[transaction_id])
-                if transaction == None:
-                                return jsonify({
-                                    "code": 404,
-                                    "data": {
-                                        "status": "fail",
-                                        "message": "Transaction not found"
-                                    }
-                                }),404
-                else: 
-                    app.db.session.delete(transaction)
-                    app.db.session.commit()
-                data 
-            return redirect(url_for('getTransaction'))
+                userID = data["userID"]
+                accountID =  data["accountID"] 
+                receivingaccountID = data['receivingaccountID'] 
+                date =  data['date'] 
+                transactionamount = data['transactionamount'] 
+                comment = data['comment'] 
+
+                #query and match 
+
+
+                #adding instance
+                scheduledtransaction = ScheduledTransaction(AccountID = accountID, ReceivingAccountID = receivingaccountID,
+                                                            Date = date, TransactionAmount=transactionamount, Comment=comment)
+
+                #add transaction to db
+                db.session.add(scheduledtransaction)     
+                db.session.commit()                        
+                return jsonify({
+                    "code": 200,
+                    "data": {
+                        "transactionID":scheduledtransaction.TransactionID,
+                        "accountID ":  scheduledtransaction.AccountID,
+                        "receivingaccountID": scheduledtransaction.ReceivingAccountID,
+                        "date":scheduledtransaction.Date,
+                        "transactionamount":scheduledtransaction.TransactionAmount,
+                        "comment":scheduledtransaction.Comment
+                    }
+                })
+        except Exception as error: 
+            print(error)
+            return jsonify(
+                {
+                    "code": 400,
+                    "data": "Data format error"
+                }
+            ),400
+
+    def delete_Transaction(request): 
+        data = request.get_json()
+        try:
+            if len(data) > 0:
+                for i in data["transactionID"]:
+                    transaction = ScheduledTransaction.query.filter_by(TransactionID=i).first()
+                    if transaction != None:
+                        db.session.delete(transaction)
+                        db.session.commit()
+                    
+                        return jsonify({
+                            "code": 200,
+                            "data": {
+                                "message": "Deleted Successfully"
+                            }
+                        })
+                    else:
+                        return jsonify({
+                            "code": 200,
+                            "data": {
+                                "message": "No transactions deleted"
+                            }
+                        })
+
         except Exception as error: 
             print(error)
             return jsonify(
