@@ -1,6 +1,5 @@
 import axios from 'axios';
 import {getHeader} from './apiConstant'
-import session from './session';
 
 const endpoint = `${URL}/user/info`
 
