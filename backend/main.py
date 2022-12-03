@@ -19,13 +19,18 @@ def test_api():
         }
     )
 
-
 #get transaction by 
 @app.route("/transactions")
 def getTransaction():
      return TransactionController.getTransaction(request)
     
+@app.route("/user/login", methods=["POST"])
+def authUser():
+    return UserController.authUser(request)
 
+@app.route("/user/info", methods=["POST"])
+def retrieveUserDetails():
+    return UserController.retrieveUserDetails(request)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5003, debug=True)
