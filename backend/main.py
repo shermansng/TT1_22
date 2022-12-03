@@ -27,7 +27,7 @@ def getTransaction():
     
 
 
-@app.route("/user/details", methods=["POST"])
+@app.route("/user/info", methods=["POST"])
 def retrieveUserDetails():
     return UserController.retrieveUserDetails(request)
 
