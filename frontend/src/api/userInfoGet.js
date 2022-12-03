@@ -1,7 +1,8 @@
 import axios from 'axios';
+import {getHeader} from './apiConstant'
+import session from './session';
 
 const endpoint = `${URL}/user/info`
-
 
 /**
  *
@@ -13,7 +14,9 @@ const getUserInfo = async (id) => {
         id,
     }
     try {
-        let axiosres = await axios.post(endpoint, payload);
+        let axiosres = await axios.post(endpoint, payload, {
+            headers: getHeader()
+        });
         let res = axiosres.data;
         let data = res.data;
         console.log(data);
