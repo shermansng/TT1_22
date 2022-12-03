@@ -1,9 +1,9 @@
 import axios from 'axios';
 import {URL, getHeader} from './apiConstant'
 
-const ep = `${URL}/user/bankaccounts`
+const ep = `${URL}/user/accountid`
 
-const getBankAccountInfo = async (userid) => {
+const getBankAccountIds = async (userid) => {
     const payload = {
         userid
     }
@@ -23,4 +23,4 @@ const getBankAccountInfo = async (userid) => {
     }
 };
 
-export default getBankAccountInfo;
+export default getBankAccountIds;
