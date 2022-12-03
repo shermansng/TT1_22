@@ -1,5 +1,6 @@
 import axios from 'axios';
-import {URL} from './apiConstant';
+import {getHeader} from './apiConstant'
+import session from './session';
 
 const ep = `${URL}/user/bankaccounts`
 
@@ -8,7 +9,9 @@ const getBankAccountInfo = async (id) => {
         id
     }
     try {
-        let res = await axios.post(ep, payload);
+        let res = await axios.post(ep, payload, {
+            headers: getHeader()
+        });
         let data = res.data;
         if (data.code === 200) {
             return data.data;
