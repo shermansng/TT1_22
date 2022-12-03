@@ -109,4 +109,59 @@ class UserController():
                 }
             ),400
 
+    def updateUserDetails(request):
+        data = request.get_json()
+        try:
+            if len(data) > 0:
+                try:
+                    user_data = User.query.filter_by(UserID=data["id"]).first()
+                    
+                    if user_data == None:
+                        return jsonify({
+                            "code": 404,
+                            "data": {
+                                "status": "fail",
+                                "message": "User details not found"
+                            }
+                        }),404
+
+                    else:
+                        if(len(data["email"]) == 0 and len(data["address"]) == 0):
+                            return jsonify({
+                                "code": 200,
+                                "data": {
+                                    "status": "fail",
+                                    "message": "No data is updated"
+                                }
+                            }),200
+                        else:
+
+                            if(len(data["email"]) != 0):
+                                user_data.Email = data["email"]
+                            if(len(data["address"]) != 0):
+                                user_data.Address = data["address"]
+                            db.session.commit()
+                            return jsonify({
+                                "code": 200,
+                                "data": {
+                                    "status": "success"
+                                }
+                            }),200
+                    
+                except Exception as error:
+                    print(error)
+                    return jsonify(
+                        {
+                            "code": 500,
+                            "data": "User Update Info Error. Please contact the administrator"
+                        }
+                    ),500
+        except Exception as error:
+            print(error)
+            return jsonify(
+                {
+                    "code": 400,
+                    "data": "Data format error"
+                }
+            ),400
             
