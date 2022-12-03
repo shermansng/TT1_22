@@ -4,7 +4,14 @@ import session from './session';
 
 const endpoint = `${URL}/user/login`;
 
+/**
+ *
+ * @param {*} username
+ * @param {*} password
+ * @returns id of the user if authenticated, else returns false;
+ */
 const authenticateUser = async (username, password) => {
+    console.log(`Username: ${username}, password: ${password}`);
     const payload = {
         username,
         password
@@ -12,12 +19,12 @@ const authenticateUser = async (username, password) => {
 
     try {
         let res = await axios.post(endpoint, payload);
-        let data = res.data;
+        let data = res.data.data;
+        console.log(data);
         if (data.status === 'success') {
             session.token = data.token;
-            session.user.firstname = data.firstName;
-            session.user.lastname = data.lastName;
-            return true
+            session.userid = data.id;
+            return data.id;
         } else if (data.status === 'fail') {
             console.log(data.message);
             return false;
