@@ -2,27 +2,26 @@ import axios from 'axios';
 
 const endpoint = `${URL}/user/info`
 
+
 /**
- * returns the user information object in the form:
- * {
- *     address,
- *     email,
- *     firstName,
- *     lastName,
- *     optIntoPhyStatements,
- * }
+ *
+ * @param {*} id
+ * @param {*} email
+ * @param {*} address
+ * @returns User info object, else false
  */
 const getUserInfo = async (id) => {
     const payload = {
-        id
+        id,
     }
     try {
         let axiosres = await axios.post(endpoint, payload);
         let res = axiosres.data;
-        if (res.code === 200) {
-            return res.data;
-        } else if (res.code === 404) {
-            console.log(res.data.message);
+        let data = res.data;
+        console.log(data);
+        if (data.code === 200) {
+            return data.data;
+        } else {
             return false;
         }
     } catch (err) {
