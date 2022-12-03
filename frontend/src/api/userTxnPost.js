@@ -5,7 +5,9 @@ const ep = `${URL}/transactions/insert`;
 
 const insertTransaction = async (txnObj) => {
     try {
-        let res = await axios(ep, txnObj);
+        let res = await axios.post(ep, txnObj, {
+            headers: getHeader()
+        });
         if (res) {
             return true;
         } else {

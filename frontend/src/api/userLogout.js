@@ -10,6 +10,8 @@ const logout = async () => {
         let res = await axios.post(endpoint, payload, {
             headers: getHeader()
         });
+        console.log(res);
+        return true;
     } catch (err) {
         console.log(err);
         return false;
