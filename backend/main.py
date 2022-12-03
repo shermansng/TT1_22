@@ -19,10 +19,17 @@ def test_api():
         }
     )
 
-#get transaction by 
-@app.route("/transactions")
+#get all transactions
+@app.route("/transactions" , methods=["GET"])
 def getTransaction():
      return TransactionController.getTransaction(request)
+
+#get transactions by bank account id
+@app.route("/transactionsByAccount" , methods=["POST"])
+def getTransactionsByAccount():
+     return TransactionController.getTransactionsByAccount(request)
+
+
     
 @app.route("/user/login", methods=["POST"])
 def authUser():
