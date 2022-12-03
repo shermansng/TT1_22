@@ -4,6 +4,12 @@ import session from './session';
 
 const endpoint = `${URL}/user/login`;
 
+/**
+ * 
+ * @param {*} username
+ * @param {*} password
+ * @returns id of the user if authenticated, else returns false;
+ */
 const authenticateUser = async (username, password) => {
     const payload = {
         username,
@@ -15,9 +21,8 @@ const authenticateUser = async (username, password) => {
         let data = res.data;
         if (data.status === 'success') {
             session.token = data.token;
-            session.user.firstname = data.firstName;
-            session.user.lastname = data.lastName;
-            return true
+            session.userid = data.id;
+            return data.id;
         } else if (data.status === 'fail') {
             console.log(data.message);
             return false;
