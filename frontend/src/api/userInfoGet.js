@@ -6,8 +6,6 @@ const endpoint = `${URL}/user/info`
 /**
  *
  * @param {*} id
- * @param {*} email
- * @param {*} address
  * @returns User info object, else false
  */
 const getUserInfo = async (id) => {
