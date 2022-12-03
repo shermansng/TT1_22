@@ -1,6 +1,6 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import About from "./components/About";
+import Account from "./components/Account"
 import Dashboard from "./components/Dashboard";
 import Home from "./components/Home";
 import {NavBar} from "./components/NavBar";
@@ -13,7 +13,7 @@ function App() {
           <Route path="/" element={<NavBar />} />
           <Route path="/home" element={<Home />} />
           <Route path="/transaction" element={<Dashboard />} />
-          <Route path="/account" element={<About />} />
+          <Route path="/account" element={<Account />} />
           <Route path="/nomatch" element={<NoMatch />} />
         </Routes>
     </div>
