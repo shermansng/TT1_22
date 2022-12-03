@@ -18,9 +18,9 @@ import Tooltip from "@mui/material/Tooltip";
 import {NavBar} from "../NavBar/index";
 import{ConfirmationPopUp} from "../ConfirmationPopUp";
 import { visuallyHidden } from "@mui/utils";
-import getTransactions from "api/userTxnHistoryGet";
 import AddIcon from '@mui/icons-material/Add';
 import { IconButton } from "@mui/material";
+import { AddTransactionDialog } from "components/AddTransactionDialog";
 import axios from "axios";
 
 export default function ScheduledTransactionsTable() {
@@ -34,13 +34,13 @@ export default function ScheduledTransactionsTable() {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
   // function to format data received
-  function createData(id, accountId, receivingAccountId, date, money, comment) {
+  function createData(id, accountId, receivingAccountId, date, amount, comment) {
     return {
       id,
       accountId,
       receivingAccountId,
       date,
-      money,
+      amount,
       comment
     };
   }
@@ -181,10 +181,10 @@ export default function ScheduledTransactionsTable() {
       label: "Date"
     },
     {
-      id: "money",
+      id: "amount",
       numeric: true,
       disablePadding: false,
-      label: "Money"
+      label: "Amount"
     },
     {
       id: "comment",
@@ -295,13 +295,11 @@ export default function ScheduledTransactionsTable() {
 
         {numSelected > 0 ? (
           <Tooltip title="Delete Scheduled Transactions">
-            <ConfirmationPopUp />
+            <ConfirmationPopUp value={selected} />
           </Tooltip>
         ) : (
           <Tooltip title="Add Scheduled Transactions">
-            <IconButton>
-              <AddIcon/>
-            </IconButton>
+            <AddTransactionDialog/>
           </Tooltip>
         )}
       </Toolbar>
@@ -370,7 +368,7 @@ export default function ScheduledTransactionsTable() {
                       <TableCell align="right">{row.accountId}</TableCell>
                       <TableCell align="right">{row.receivingAccountId}</TableCell>
                       <TableCell align="right">{row.date}</TableCell>
-                      <TableCell align="right">{row.money}</TableCell>
+                      <TableCell align="right">{row.amount}</TableCell>
                       <TableCell align="right">{row.comment}</TableCell>
                     </TableRow>
                   );
