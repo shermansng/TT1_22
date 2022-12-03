@@ -351,42 +351,68 @@ class UserController():
         # Receive the userid from the request
         data = request.get_json()
 
-        try:
-            # Retrieve Account ID(s) according to userid from BankAccount Table
-            # Include query within try block to catch any errors
-            user_acc_id_data = BankAccount.query.filter_by(UserID=data["userid"]).all()
+        auth_token = AuthUtil.getAuthToken(request)
+        existingBlacklistToken = AuthUtil.checkBlacklistToken(auth_token)
+        if auth_token != None:
+            if existingBlacklistToken == None:
+                resp = AuthUtil.decode_auth_token(auth_token)
+                if not isinstance(resp, str):
+                    try:
+                        # Retrieve Account ID(s) according to userid from BankAccount Table
+                        # Include query within try block to catch any errors
+                        user_acc_id_data = BankAccount.query.filter_by(UserID=data["userid"]).all()
 
-            # if userid returns empty list, it means the user does not exist, return 404
-            if user_acc_id_data == []:
-                return jsonify({
-                    "code": 404,
-                    "data": {
-                        "status": "failure",
-                        "message": "User does not exist"
-                    }
-                })
+                        # if userid returns empty list, it means the user does not exist, return 404
+                        if user_acc_id_data == []:
+                            return jsonify({
+                                "code": 404,
+                                "data": {
+                                    "status": "failure",
+                                    "message": "User does not exist"
+                                }
+                            })
 
-            # if userid returns a pupolated list, it means the user exists, return 200 and data retrieved
-            else:
-                acc_id_data = []
-                
-                for bank_acc in user_acc_id_data:
-                    acc_id_data.append(bank_acc.AccountID)
+                        # if userid returns a pupolated list, it means the user exists, return 200 and data retrieved
+                        else:
+                            acc_id_data = []
+                            
+                            for bank_acc in user_acc_id_data:
+                                acc_id_data.append(bank_acc.AccountID)
 
-                return jsonify({
-                    "code": 200,
-                    "status": "success",
-                    "message": "User Account ID successfully retrieved",
-                    "data": acc_id_data
+                            return jsonify({
+                                "code": 200,
+                                "status": "success",
+                                "message": "User Account ID successfully retrieved",
+                                "data": acc_id_data
+                                
+                            })
                     
-                })
-        
-        # catch any request error and return 500
-        except Exception as error:
-            print(error)
-            return jsonify(
-                {
-                    "code": 500,
-                    "data": "Please check your POST request values"
-                }
-            ),500
+                    # catch any request error and return 500
+                    except Exception as error:
+                        print(error)
+                        return jsonify(
+                            {
+                                "code": 500,
+                                "data": "Please check your POST request values"
+                            }
+                        ),500
+                else:
+                    responseObject = {
+                        'status': 'fail',
+                        'message': resp
+                    }
+                    return (jsonify(responseObject)), 401
+            else:
+                responseObject = {
+                        'status': 'fail',
+                        'message': 'Invalid Token'
+                    }
+                return (jsonify(responseObject)), 401
+        else:
+            responseObject = {
+                "code": 401,
+                'message': 'Provide a valid auth token'
+            }
+            return (jsonify(responseObject)), 401
+
+    
