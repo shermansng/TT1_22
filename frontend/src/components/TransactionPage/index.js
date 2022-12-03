@@ -47,33 +47,41 @@ export default function ScheduledTransactionsTable() {
 
 
   React.useEffect(() => {
+    let rows = []
     const getTransactions = async (accountId) => {
       console.log(`AccountID: ${accountId}`);
       const payload = {
           "accountID":accountId
       };
-    //   console.log(payload)
-    //   try {
-    //       await axios.post('http://ec2-13-215-211-254.ap-southeast-1.compute.amazonaws.com/transactions/byAccount', payload, {
-    //         headers: {
-    //           "Authorization": `Bearer ${sessionStorage.getItem("token")}`
-    //         }
-    //       })
-    //         .then((response) => {
-    //           console.log(response.data.data)
-    //           const mappedData = response.data.data.map(x => createData(x.TransactionID,x.AccountID,x.ReceivingAccountID,x.Date,x.TransactionAmount,x.Comment))
-    //           setRows(mappedData)
-    //         });
-    //   } catch (err) {
-    //       console.log(err);
-    //       return false;
-    //   }
-    const mappedData = JSON.parse(sessionStorage.getItem("accountIds")).map(x => createData(x.TransactionID, x.AccountID, x.ReceivingAccountID, x.TransactionAmount,x.Comment));
-    setRows(mappedData);
-  }
+      console.log(payload)
+      try {
+          await axios.post('http://ec2-13-215-211-254.ap-southeast-1.compute.amazonaws.com/transactions/byAccount', payload, {
+            headers: {
+              "Authorization": `Bearer ${sessionStorage.getItem("token")}`
+            }
+          })
+            .then((response) => {
+              console.log(response.data.data)
+              const mappedData = response.data.data.map(x => createData(x.TransactionID,x.AccountID,x.ReceivingAccountID,x.Date,x.TransactionAmount,x.Comment))
+              rows = rows.concat(mappedData)
+              // console.log(rows)
+              setRows(rows)
+            });
+      } catch (err) {
+          console.log(err);
+          return false;
+      }
+    }
+    
+    const accountIds = JSON.parse(sessionStorage.getItem("accountIds"))
+    for (let i = 0; i<accountIds.length;i++) {
+      getTransactions(accountIds[i])
+    }
+    // setRows(rows)
+    // console.log("rows", rows)
 
     // call the function
-    getTransactions(828120424)
+    // getTransactions(828120424)
   }, [])
 
   const handleRequestSort = (event, property) => {
