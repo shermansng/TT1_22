@@ -4,6 +4,7 @@ import './Login.css';
 import { Button, TextField } from '@mui/material';
 import authUser from '../../api/userAccountAuth';
 import userInfoGet from '../../api/userInfoGet';
+import sessionLogout from "../../api/userLogout";
 
 const Login = () => {
 
@@ -11,11 +12,20 @@ const Login = () => {
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
 
+    const logout = () => {
+        sessionLogout();
+        sessionStorage.removeItem("token");
+        sessionStorage.removeItem("id");
+        navigate("/");
+    };
+
     const login = async () => {
         let id = await authUser(username, password);
         if (id) {
             console.log("Login success");
+            setTimeout(logout, 300000);
             navigate("/home")
+            sessionStorage.setItem("id",id)
         } else {
             console.log("Login failed");
             // login failure

@@ -55,7 +55,7 @@ export default function ScheduledTransactionsTable() {
       console.log(payload)
       try {
           await axios.post('http://ec2-13-215-211-254.ap-southeast-1.compute.amazonaws.com/transactions/byAccount', payload, {
-            headers: { 
+            headers: {
               "Authorization": `Bearer ${sessionStorage.getItem("token")}`
             }
           })
@@ -69,7 +69,7 @@ export default function ScheduledTransactionsTable() {
           return false;
       }
   }
-  
+
     // call the function
     getTransactions(828120424)
   }, [])

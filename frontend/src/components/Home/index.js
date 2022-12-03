@@ -1,5 +1,5 @@
 import * as React from "react";
-import {NavBar} from "../NavBar/index"
+import {NavBar, Logout} from "../NavBar/index"
 
 const Home = () => {
   return (

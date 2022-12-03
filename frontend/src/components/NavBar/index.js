@@ -2,18 +2,14 @@ import { Button } from "@mui/material";
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./NavBar.css"
-import session from '../../api/session';
+import sessionLogout from "../../api/userLogout";
 
 function NavBar() {
 
   const navigate = useNavigate();
-  const sessionProperties = Object.getOwnPropertyNames(session);
   const logout = () =>{
-    //clear session object
-    sessionProperties.forEach(property => {
-      delete session[property];
-    });
-    console.log(session)
+    sessionLogout()
+    sessionStorage.removeItem("token")
     navigate("/")
   }
   return (

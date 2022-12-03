@@ -1,24 +1,21 @@
-// import axios from 'axios';
-// import session from './session';
+import axios from 'axios';
+import {URL, getHeader} from './apiConstant';
 
-// const endpoint = `${URL}/user/logout`
+const endpoint = `${URL}/user/logout`
 
-// const logout = async (username) => {
-//     let token = session.token;
-//     let payload = {
-//         username,
-//         token
-//     }
-//     try {
-//         // let res = await axios.
-//         let axiosres = await axios.post(endpoint, payload)
-//         let res = axiosres.data
-//         console.log(res.code)
-//         return res.code
-//     } catch (err) {
-//         console.log(err);
-//         return false;
-//     }
-// };
+const logout = async () => {
+    let payload = {}
+    try {
+        // let res = await axios.
+        let res = await axios.post(endpoint, payload, {
+            headers: getHeader()
+        });
+        console.log(res);
+        return true;
+    } catch (err) {
+        console.log(err);
+        return false;
+    }
+};
 
-// export default logout;;
+export default logout;;
