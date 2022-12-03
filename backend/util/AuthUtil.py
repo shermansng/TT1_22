@@ -32,7 +32,7 @@ class AuthUtil():
         """
         try:
             payload = {
-                'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=3600),
+                'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=300),
                 'iat': datetime.datetime.utcnow(),
                 'sub': user_id
             }
