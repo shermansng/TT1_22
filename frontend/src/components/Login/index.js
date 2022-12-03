@@ -16,6 +16,7 @@ const Login = () => {
         if (id) {
             console.log("Login success");
             navigate("/home")
+            sessionStorage.setItem("id",id)
         } else {
             console.log("Login failed");
             // login failure
