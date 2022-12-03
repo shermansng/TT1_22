@@ -1,5 +1,6 @@
 import config
 from controllers.UserController import UserController
+from controllers.TransactionController import TransactionController
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
@@ -18,6 +19,11 @@ def test_api():
         }
     )
 
+#get transaction by 
+@app.route("/transactions")
+def getTransaction():
+     return TransactionController.getTransaction(request)
+    
 @app.route("/user/login", methods=["POST"])
 def authUser():
     return UserController.authUser(request)
