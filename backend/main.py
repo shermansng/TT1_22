@@ -59,7 +59,6 @@ def logoutUser():
     uuid = str(uuid4())
     APITransactionLogUtil.insertLog("LOGOUT", None, None, uuid)
     response = UserController.logoutUser(request)
-    APITransactionLogUtil.insertLog("LOGOUT", None, response.get_data(), uuid)
     return response
 
 @app.route("/user/bankaccounts", methods=["POST"])

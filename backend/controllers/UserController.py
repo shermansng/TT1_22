@@ -181,28 +181,32 @@ class UserController():
                         db.session.add(blacklist_token)
                         db.session.commit()
                         responseObject = {
+                            "code": 200,
                             'status': 'success',
                             'message': 'Successfully logged out.'
                         }
                         return (jsonify(responseObject)), 200
                     except Exception as e:
                         responseObject = {
+                            "code": 401,
                             'status': 'fail',
                             'message': e
                         }
                         return (jsonify(responseObject)), 200
                 else:
                     responseObject = {
+                        "code": 401,
                         'status': 'fail',
                         'message': resp
                     }
-                    return (jsonify(responseObject)), 401
+                    return (jsonify(responseObject)), 200
             else:
                 responseObject = {
+                        "code": 401,
                         'status': 'fail',
                         'message': 'Invalid Token'
                     }
-                return (jsonify(responseObject)), 401
+                return (jsonify(responseObject)), 200
 
         else:
             return jsonify(
@@ -210,7 +214,7 @@ class UserController():
                     "code": 401,
                     "data": "Provide a valid auth token"
                 }
-            ), 401
+            ), 200
             
     def getBankAccInfo(request):
         data = request.get_json()
